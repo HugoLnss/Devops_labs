@@ -60,6 +60,50 @@ describe('User REST API', () => {
   })
 
   // describe('GET /user', ()=> {
-  //   // TODO Create test for the get method
-  // })
+    describe('GET /user', ()=> {
+      // TODO Create test for the get method
+      it('get a user by username', (done) => {
+        const user = {
+          username: 'johndoe',
+          firstname: 'John',
+          lastname: 'Doe'
+        }
+        chai.request(app)
+          .post('/user')
+          .send(user)
+          .then(() => {
+            chai.request(app)
+              .get('/user/johndoe')
+              .then((res) => {
+                chai.expect(res).to.have.status(200)
+                chai.expect(res.body.status).to.equal('success')
+                chai.expect(res.body.data.username).to.equal('johndoe')
+                chai.expect(res.body.data.firstname).to.equal('John')
+                chai.expect(res.body.data.lastname).to.equal('Doe')
+                chai.expect(res).to.be.json
+                done()
+              })
+              .catch((err) => {
+                throw err
+              })
+          })
+          .catch((err) => {
+            throw err
+          })
+      })
+      
+      it('cannot get a user when it does not exist', (done) => {
+        chai.request(app)
+          .get('/user/johndoe')
+          .then((res) => {
+            chai.expect(res).to.have.status(404)
+            chai.expect(res.body.status).to.equal('error')
+            chai.expect(res).to.be.json
+            done()
+          })
+          .catch((err) => {
+            throw err
+          })
+      })
+    })
 })
