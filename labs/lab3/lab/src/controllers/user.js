@@ -32,5 +32,6 @@ module.exports = {
         lastname: res.lastname
       }
       callback(null, user) // Return callback
+  })
   }
 }

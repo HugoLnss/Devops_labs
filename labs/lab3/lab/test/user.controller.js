@@ -1,5 +1,4 @@
 const { expect } = require('chai')
-const user = require('../src/controllers/user')
 const userController = require('../src/controllers/user')
 const db = require('../src/dbClient')
 
@@ -38,7 +37,6 @@ describe('User', () => {
     })
 
     it('avoid creating an existing user', (done)=> {
-       // TODO create this test
       const user = {
         username: 'sergkudinov',
         firstname: 'Sergei',
@@ -46,7 +44,7 @@ describe('User', () => {
       }
       //On va essayer de créer deux fois le user
       userController.create(user, (err, result) => {
-        expect(err).to.not.be.equal(null)
+        expect(err).to.be.equal(null)
         expect(result).to.be.equal('OK')
         userController.create(user, (err, result) => {
           expect(err).to.not.be.equal(null)
@@ -54,15 +52,12 @@ describe('User', () => {
           done()
         })
       })
-        done()
     })
   })
 
-  // TODO Create test for the get method
   describe('Get', () => {
   
     it('should get a user by username', (done) => {
-      // First, create a user to make this unit test independent from the others
       const user = {
         username: 'sergkudinov',
         firstname: 'Sergei',
@@ -71,7 +66,6 @@ describe('User', () => {
       userController.create(user, (err, result) => {
         expect(err).to.be.equal(null)
         expect(result).to.be.equal('OK')
-        // Then, get the user by username
         userController.get(user.username, (err, result) => {
           expect(err).to.be.equal(null)
           expect(result.username).to.be.equal(user.username)
@@ -83,7 +77,6 @@ describe('User', () => {
     })
   
     it('should not get a user when it does not exist', (done) => {
-      // Check with any invalid user
       userController.get('invalidusername', (err, result) => {
         expect(err).to.not.be.equal(null)
         expect(result).to.be.equal(null)
