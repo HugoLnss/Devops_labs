@@ -8,7 +8,7 @@ describe('User', () => {
     // Clean DB before each test
     db.flushdb()
   })
-
+  
   describe('Create', () => {
 
     it('create a new user', (done) => {
@@ -42,10 +42,9 @@ describe('User', () => {
         firstname: 'Sergei',
         lastname: 'Kudinov'
       }
-      //On va essayer de créer deux fois le user
-      userController.create(user, (err, result) => {
-        expect(err).to.be.equal(null)
-        expect(result).to.be.equal('OK')
+      // Create a user
+      userController.create(user, () => {
+        // Create the same user again
         userController.create(user, (err, result) => {
           expect(err).to.not.be.equal(null)
           expect(result).to.be.equal(null)
@@ -55,29 +54,30 @@ describe('User', () => {
     })
   })
 
-  describe('Get', () => {
-  
-    it('should get a user by username', (done) => {
+  describe('Get', ()=> {
+
+    it('get a user by username', (done) => {
       const user = {
         username: 'sergkudinov',
         firstname: 'Sergei',
         lastname: 'Kudinov'
       }
-      userController.create(user, (err, result) => {
-        expect(err).to.be.equal(null)
-        expect(result).to.be.equal('OK')
+      // Create a user
+      userController.create(user, () => {
+        // Get an existing user
         userController.get(user.username, (err, result) => {
           expect(err).to.be.equal(null)
-          expect(result.username).to.be.equal(user.username)
-          expect(result.firstname).to.be.equal(user.firstname)
-          expect(result.lastname).to.be.equal(user.lastname)
+          expect(result).to.be.deep.equal({
+            firstname: 'Sergei',
+            lastname: 'Kudinov'
+          })
           done()
         })
       })
     })
   
-    it('should not get a user when it does not exist', (done) => {
-      userController.get('invalidusername', (err, result) => {
+    it('can not get a user when it does not exist', (done) => {
+      userController.get('invalid', (err, result) => {
         expect(err).to.not.be.equal(null)
         expect(result).to.be.equal(null)
         done()

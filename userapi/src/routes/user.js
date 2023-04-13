@@ -26,7 +26,7 @@ userRouter
     const username = req.params.username
     userController.get(username, (err, res) => {
       let respObj
-      if (err) {
+      if(err) {
         respObj = {
           status: "error",
           msg: err.message
